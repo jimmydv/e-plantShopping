@@ -315,7 +315,7 @@ function ProductList() {
               alt=""
             />
             <a
-              href="/"
+              href="https://jimmydv.github.io/e-plantShopping/"
               style={{ textDecoration: "none" }}
             >
               <div>
