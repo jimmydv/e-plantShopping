@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
 import { addItem } from "./CartSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function ProductList() {
   const [showCart, setShowCart] = useState(false);
@@ -296,6 +296,12 @@ function ProductList() {
     }));
   };
 
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const getTotalQuantity = (items) => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
   return (
     <div>
       <div
@@ -370,6 +376,9 @@ function ProductList() {
                     id="mainIconPathAttribute"
                   ></path>
                 </svg>
+                <div className="cart_quantity_count">
+                  {getTotalQuantity(cartItems)}
+                </div>
               </h1>
             </a>
           </div>
