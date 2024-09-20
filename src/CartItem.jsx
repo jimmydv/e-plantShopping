@@ -10,9 +10,11 @@ const CartItem = ({ onContinueShopping }) => {
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = (items) => {
     let numItems = items.reduce((total, item) => {
-      return total + item.quantity;
+      // Convert cost to a number, stripping any non-numeric characters like '$'
+      const cost = parseFloat(item.cost.replace(/[^0-9.-]+/g, ""));
+      return total + item.quantity * cost;
     }, 0);
-    console.log(numItems);
+    return numItems;
   };
 
   const handleContinueShopping = (e) => {
@@ -20,15 +22,17 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleIncrement = (item) => {
-    if (item.quantity > 1) {
-      dispatch(updateQuantity({ name: item.name, quantity: item.quantity++ }));
-    } else {
-      dispatch(removeItem(item.name));
-    }
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
   const handleDecrement = (item) => {
-    dispatch(updateQuantity({ name: item.name, quantity: item.quantity-- }));
+    if (item.quantity > 1) {
+      dispatch(
+        updateQuantity({ name: item.name, quantity: item.quantity - 1 })
+      );
+    } else {
+      dispatch(removeItem(item.name));
+    }
   };
 
   const handleRemove = (item) => {
@@ -43,7 +47,7 @@ const CartItem = ({ onContinueShopping }) => {
   return (
     <div className="cart-container">
       <h2 style={{ color: "black" }}>
-        Total Cart Amount: ${calculateTotalAmount()}
+        Total Cart Amount: ${calculateTotalAmount(cart)}
       </h2>
       <div>
         {cart.map((item) => (
